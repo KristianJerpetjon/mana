@@ -51,7 +51,7 @@ class ManaConan(ConanFile):
     def _cmake_configure(self):
         cmake = CMake(self)
         cmake.definitions['ARCH']=self._arch()
-        cmake.configure(source_folder=self.source_folder+"/mana")
+        cmake.configure(source_folder=self.source_folder)
         return cmake
 
     def build(self):
