@@ -20,16 +20,16 @@ pipeline {
     stage('Pull Request pipeline') {
       when { changeRequest() }
       stages {
-        /*
+
         stage('Unit tests') {
           steps {
             sh script: "mkdir -p unittests", label: "Setup"
-            sh script: "cd unittests; env CC=gcc CXX=g++ cmake ../test/unit", label: "Cmake"
-            sh script: "cd unittests; make -j $CPUS", label: "Make"
-            sh script: "cd unittests; ctest", label: "Ctest"
+            sh script: "cd unittests; cmake ../unit", label: "cmake configure"
+            sh script: "cd unittests; make -j $CPUS", label: "build tests"
+            sh script: "cd unittests; ctest --output-on-failure", label: "run unit tests"
           }
         }
-        */
+
         /*
         stage('Build mana') {
           steps {
@@ -50,8 +50,8 @@ pipeline {
         stage('build example') {
           steps {
           	sh script: "mkdir -p build_example", label: "Setup"
-    	      sh script: "cd build_example; conan install ../unit/integration/simple -pr $PROFILE_x86_64", label: "conan_install"
-            sh script: "cd build_example; cmake ../unit/integration/simple",label: "cmake configure"
+    	      sh script: "cd build_example; conan install ../integration/simple -pr $PROFILE_x86_64", label: "conan_install"
+            sh script: "cd build_example; cmake ../integration/simple",label: "cmake configure"
             sh script: "cd build_example; make -j $CPUS", label: "building example"
             //sh script: "cd build_example; source activate.sh; cmake ../unit/integration/simple", label: "cmake configure"
     	      //sh script: "cd build_example; source activate.sh; make", label: "build"
