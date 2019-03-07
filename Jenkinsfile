@@ -62,12 +62,14 @@ pipeline {
           }
         }
         stage('Upload to bintray') {
-          script {
-            def version = sh (
-              script: 'conan inspect -a version . | cut -d " " -f 2',
-              returnStdout: true
-            ).trim()
-            sh script: "conan upload --all -r $REMOTE includeos/${version}@$USER/$CHAN", label: "Upload to bintray"
+          steps {
+            script {
+              def version = sh (
+                script: 'conan inspect -a version . | cut -d " " -f 2',
+                returnStdout: true
+              ).trim()
+              sh script: "conan upload --all -r $REMOTE includeos/${version}@$USER/$CHAN", label: "Upload to bintray"
+            }
           }
         }
       }
