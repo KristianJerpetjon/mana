@@ -30,20 +30,42 @@ pipeline {
           }
         }
         */
+        /*
         stage('Build mana') {
           steps {
             sh script: "mkdir -p build", label: "Setup"
             sh script: "cd build; conan install .. -pr $PROFILE_x86_64", label: "conan install"
+            //sh script: "conan link .. $USER/$CHAN --layout=../layout.txt"
             sh script: "cd build; cmake ..", label: "cmake configure"
     	      sh script: "cd build; make -j $CPUS", label: "Make"
           }
+        }*/
+
+        stage('Build package') {
+          steps {
+            build_conan_package("$PROFILE_x86_64")
+          }
         }
+        //TODO if fail still perform delete
         stage('build example') {
           steps {
           	sh script: "mkdir -p build_example", label: "Setup"
     	      sh script: "cd build_example; conan install ../unit/integration/simple -pr $PROFILE_x86_64", label: "conan_install"
-    	      sh script: "cd build_example; source activate.sh; cmake ../unit/integration/simple", label: "cmake configure"
-    	      sh script: "cd build_example; source activate.sh; make", label: "build"
+            sh script: "cd build_example; cmake ../unit/integration/simple",label: "cmake configure"
+            sh script: "cd build_example; make -j $CPUS", label: "building example"
+            //sh script: "cd build_example; source activate.sh; cmake ../unit/integration/simple", label: "cmake configure"
+    	      //sh script: "cd build_example; source activate.sh; make", label: "build"
+          }
+        }
+        stage('Delete package') {
+          steps {
+            script {
+              def version = sh (
+                script: 'conan inspect -a version . | cut -d " " -f 2',
+                returnStdout: true
+                ).trim()
+            }
+            sh script: "conan remove mana/${version}@$USER/$CHAN",label: "removing conan package"
           }
         }
       }
