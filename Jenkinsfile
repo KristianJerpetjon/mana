@@ -23,7 +23,8 @@ pipeline {
 
         stage('Unit tests') {
           steps {
-            sh script: "mkdir -p unittests", label: "Setup"
+            //cmake cache is bad
+            sh script: "mkdir -p unittests && rm -rf unittests/*", label: "Setup"
             sh script: "cd unittests; cmake ../unit", label: "cmake configure"
             sh script: "cd unittests; make -j $CPUS", label: "build tests"
             sh script: "cd unittests; ctest --output-on-failure", label: "run unit tests"
