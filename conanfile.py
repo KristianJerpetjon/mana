@@ -17,7 +17,7 @@ def get_version():
             output = "%s" % (prev_tag)
         return output
     except:
-        return 0.0.0
+        return '0.0.0'
 
 class ManaConan(ConanFile):
     settings= "os","arch","build_type","compiler"
