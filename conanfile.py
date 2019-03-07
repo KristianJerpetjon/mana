@@ -39,7 +39,7 @@ class ManaConan(ConanFile):
     default_channel="test"
 
     def requirements(self):
-        self.requires("includeos/[>=0.14.0]@{}/{}".format(self.user,self.channel))
+        self.requires("includeos/[>=0.14.0,include_prerelease=True]@{}/{}".format(self.user,self.channel))
 
     def _arch(self):
         return {
