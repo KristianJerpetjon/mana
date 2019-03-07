@@ -43,10 +43,10 @@ if(NOT CONAN_EXPORTED)
   )
 endif()
 
-include_directories(../../include)
+include_directories(../include)
 
 set(MANA_SOURCES
-  ../../src/middleware/butler.cpp
+  ../src/middleware/butler.cpp
 )
 
 add_library(mana ${MANA_SOURCES})
